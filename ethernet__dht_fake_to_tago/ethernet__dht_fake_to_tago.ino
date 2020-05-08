@@ -1,5 +1,5 @@
 /*
- * Referências:
+ * Based:
  *    - https://docs.tago.io/en/articles/6-arduino
  *    
  *    // Arduino + Shield Ethernet + LED + Sensor de temperatura (fake)
