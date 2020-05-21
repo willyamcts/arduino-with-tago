@@ -12,14 +12,23 @@
 //Definicoes de IP, mascara de rede e gateway
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192, 168, 15, 177);
+IPAddress ip(192, 168, 15, 250);
+IPAddress dnServer(1, 1, 1, 1);
+IPAddress gateway(192, 168, 15, 1);
+IPAddress subnet(255, 255, 255, 0);
+
+
 
 // Token Tago.io
 String Device_Token = "f3832aba-b9b3-4367-915c-290cea3b3b94";
 //int keyIndex = 0;         // your network key Index number (needed only for WEP)
 
-// Tempo para atualizar os dados no Tago.io
-int timeWait = 60000*5;
+
+// Tempo para atualizar os dados no Tago.io (em minutos)
+const float updateTime = 0.5;
+
+// Tempo utilizado para atualizar os dados no Tago.io - de min p/ millis
+const int timeWait = 60000 * updateTime;
 
 
 ///////////////////////////////////////////////
@@ -38,13 +47,20 @@ int temp = 0;
 
 void setup() {  
   Serial.begin(9600);
+  Serial.println("Started...");
 
   // start the Ethernet connection:
-  if (Ethernet.begin(mac) == 0) {
+  if (Ethernet.begin(mac) == 0) {    
     Serial.println("Failed to configure Ethernet using DHCP");
     // try to congifure using IP address instead of DHCP:
-    Ethernet.begin(mac, ip);
+    Ethernet.begin(mac, ip, dnServer, gateway, subnet);
+    delay(1000); Serial.print("IP without DHCP: "); Serial.println(Ethernet.localIP());
+    
+  } else {    
+    Serial.print("IP with DHCP: "); Serial.println(Ethernet.localIP());
   }
+
+  Serial.print("Time a wait: "); Serial.print(timeWait/1000); Serial.println("s"); 
   
   pinMode(LED, OUTPUT);
 
@@ -54,10 +70,18 @@ void setup() {
 
 
 void loop() {
-  
+/*
+  //Debug
+  Serial.print("\n\nLast connection: "); Serial.println(lastConnectionTime);
+  Serial.print("Next connection: "); Serial.println(lastConnectionTime + timeWait); 
+  Serial.print("Current millis: "); Serial.println(millis());
+  delay(5000);
+*/
+
   if( millis() < 5000 || millis() > (lastConnectionTime+timeWait) ) {
     
-    Serial.print(millis()); 
+    Serial.print("\n\nmillis: "); Serial.print(millis()/1000); Serial.print("s");
+    
     changeLED();
 
     temp = random(15, 40);
