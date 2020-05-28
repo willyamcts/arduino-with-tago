@@ -33,7 +33,6 @@ const int timeWait = 60000 * updateTime;
 
 ///////////////////////////////////////////////
 //          Code Static Bellow...            //
-///////////////////////////////////////////////
 
 EthernetClient client;
 
@@ -43,6 +42,8 @@ char server[] = "api.tago.io";
 unsigned long lastConnectionTime = 0;
 int temp = 0;
 
+//                  Finish.                  //
+///////////////////////////////////////////////
 
 
 void setup() {  
@@ -64,7 +65,7 @@ void setup() {
   
   pinMode(LED, OUTPUT);
 
-  digitalWrite(LED, HIGH);
+  digitalWrite(LED, LOW);
 }
 
 
